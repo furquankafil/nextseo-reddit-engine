@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "nextdev-cursor-extension": {
+      "command": "node",
+      "args": [
+        "c:\\Users\\admin\\nextdev-projects\\nextseo-reddit-engine\\.nextdev\\mcp-bridge.cjs"
+      ]
+    }
+  }
+}

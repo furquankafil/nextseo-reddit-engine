@@ -1,0 +1,21 @@
+{
+  "name": "nextseo-reddit-engine",
+  "version": "1.0.0",
+  "description": "Reddit automation engine for NEXTSEO affiliate sales",
+  "type": "module",
+  "scripts": {
+    "scan": "tsx src/index.ts scan",
+    "post": "tsx src/index.ts post",
+    "comment": "tsx src/index.ts comment",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "snoowrap": "^1.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

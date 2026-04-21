@@ -1,83 +1,56 @@
-import { getRedditClient } from './client';
-import { config } from '../config';
+import { getRedditClient, sleep } from "./client";
+import { config } from "../config";
 
-interface RelevantPost {
-  id: string;
-  subreddit: string;
-  title: string;
-  url: string;
-  score: number;
-  numComments: number;
-  createdUtc: number;
-}
+const KEYWORDS = ["seo", "blog", "traffic", "ranking", "content"];
+const MAX_REPLIES = 3;
 
-export async function engageWithComments(): Promise<void> {
+export async function engageWithComments() {
+  console.log("💬 Starting comment engine...\n");
+
   const reddit = getRedditClient();
+  let replyCount = 0;
 
-  console.log('Comment Engager');
-  console.log('===============\n');
-  console.log('Searching for relevant posts to comment on...\n');
+  for (const subreddit of config.targetSubreddits) {
+    console.log(`\n🔎 Checking r/${subreddit}...`);
 
-  const relevantPosts: RelevantPost[] = [];
+    const posts = await reddit.getSubreddit(subreddit).getNew({ limit: 10 });
 
-  for (const keyword of config.searchKeywords.slice(0, 5)) {
-    try {
-      console.log(`  Searching: "${keyword}"`);
-
-      const results = await reddit.search({
-        query: keyword,
-        sort: 'new',
-        time: 'week',
-        limit: 10,
-      });
-
-      for (const post of results) {
-        // Skip old posts and posts with too many comments (harder to stand out)
-        const ageHours = (Date.now() / 1000 - post.created_utc) / 3600;
-        if (ageHours > 48 || post.num_comments > 50) continue;
-
-        relevantPosts.push({
-          id: post.id,
-          subreddit: post.subreddit.display_name,
-          title: post.title,
-          url: `https://reddit.com${post.permalink}`,
-          score: post.score,
-          numComments: post.num_comments,
-          createdUtc: post.created_utc,
-        });
+    for (const post of posts) {
+      if (replyCount >= MAX_REPLIES) {
+        console.log("⛔ Reply limit reached");
+        return;
       }
 
-      await sleep(config.delays.betweenSearches);
-    } catch (error) {
-      console.log(`  Failed to search for "${keyword}"`);
+      const title = post.title.toLowerCase();
+
+      if (!KEYWORDS.some((k) => title.includes(k))) continue;
+
+      if (post.author?.name === config.reddit.username) continue;
+
+      console.log("🎯 Found:", post.title);
+
+      const replies = [
+        `I had a similar issue. What helped me was using an AI blogging tool to scale content faster. It improved my rankings over time. You can check it here: ${config.referralUrl}`,
+
+        `SEO can be slow, but I started using an AI content tool and it made things easier. Helped me stay consistent. Sharing in case it helps: ${config.referralUrl}`,
+
+        `I struggled with this too initially. I switched to an AI blogging tool and saw better results after a few weeks. You can check it here: ${config.referralUrl}`,
+      ];
+
+      const reply = replies[Math.floor(Math.random() * replies.length)];
+
+      await sleep(config.delays.betweenComments + Math.random() * 30000);
+
+      try {
+        await post.reply(reply);
+        console.log("✅ Replied successfully\n");
+
+        replyCount++;
+      } catch (err) {
+        console.error("❌ Error replying:", err);
+      }
     }
   }
 
-  // Deduplicate by post ID
-  const unique = [...new Map(relevantPosts.map(p => [p.id, p])).values()];
-
-  // Sort by recency
-  unique.sort((a, b) => b.createdUtc - a.createdUtc);
-
-  console.log(`\nFound ${unique.length} relevant posts:\n`);
-
-  for (const post of unique.slice(0, 15)) {
-    const ageHours = Math.round((Date.now() / 1000 - post.createdUtc) / 3600);
-    console.log(`  r/${post.subreddit} (${ageHours}h ago, ${post.numComments} comments)`);
-    console.log(`    "${post.title}"`);
-    console.log(`    ${post.url}\n`);
-  }
-
-  console.log('To leave a comment, implement the logic in this file.');
-  console.log('Use reddit.getSubmission(id).reply(text) from snoowrap.\n');
-
-  console.log('Tips for comments:');
-  console.log('  - Be genuinely helpful first, promotional second');
-  console.log('  - Answer their question, then mention the tool naturally');
-  console.log('  - Keep it conversational, not sales-y');
-  console.log(`  - Your referral link: ${config.referralUrl}`);
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  console.log(`🎉 Total replies: ${replyCount}`);
 }

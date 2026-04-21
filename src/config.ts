@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import Snoowrap from 'snoowrap';
 
 export const config = {
   reddit: {
@@ -8,47 +8,37 @@ export const config = {
     password: process.env.REDDIT_PASSWORD || '',
     userAgent: `nextseo-engine:v1.0.0 (by /u/${process.env.REDDIT_USERNAME || 'unknown'})`,
   },
-
-  referralUrl: process.env.NEXTSEO_REFERRAL_URL || 'https://www.withnextseo.com',
-
-  // Subreddits to target — add, remove, or reorder based on what works
+  searchKeywords: [
+    'seo',
+    'content marketing',
+    'blogging',
+    'traffic',
+    'ranking',
+    'small business',
+    'entrepreneur',
+    'startup',
+    'saas',
+  ],
   targetSubreddits: [
     'SEO',
-    'bigseo',
     'smallbusiness',
     'Entrepreneur',
     'startups',
-    'SaaS',
-    'contentmarketing',
-    'blogging',
-    'juststart',
-    'digital_marketing',
-    'growmybusiness',
-    'marketing',
-    'webdev',
-    'indiehackers',
+    'content_marketing',
+    'Blogging',
   ],
-
-  // Keywords to search for when finding relevant posts to comment on
-  searchKeywords: [
-    'SEO tool',
-    'blog tool',
-    'AI blog',
-    'content marketing tool',
-    'automated blog',
-    'rank on Google',
-    'organic traffic',
-    'blog for business',
-    'SEO strategy',
-    'content strategy',
-    'AI SEO',
-    'blog writing tool',
-  ],
-
-  // Rate limiting — respect Reddit's API limits
+  referralUrl: process.env.NEXTSEO_REFERRAL_URL || 'https://www.withnextseo.com/r/demo',
   delays: {
-    betweenPosts: 10 * 60 * 1000,    // 10 minutes between posts
-    betweenComments: 2 * 60 * 1000,   // 2 minutes between comments
-    betweenSearches: 5 * 1000,        // 5 seconds between search queries
+    betweenSearches: 5 * 1000,
+    betweenComments: 2 * 60 * 1000,
   },
 };
+
+// ✅ Reddit client (IMPORTANT FIX)
+export const reddit = new Snoowrap({
+  userAgent: config.reddit.userAgent,
+  clientId: config.reddit.clientId,
+  clientSecret: config.reddit.clientSecret,
+  username: config.reddit.username,
+  password: config.reddit.password,
+});

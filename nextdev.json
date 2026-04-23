@@ -1,0 +1,54 @@
+{
+  "name": "nextseo-reddit-engine",
+  "title": "NEXTSEO Reddit Automation Engine",
+  "description": "Automated Reddit bot for NEXTSEO affiliate marketing - earn $30/month per customer through stealth posting and comment engagement",
+  "version": "1.0.0",
+  "author": "Nextdev User",
+  "license": "MIT",
+  "repository": "https://github.com/furquankafil/nextseo-reddit-engine",
+  "category": "automation",
+  "tags": [
+    "reddit",
+    "automation",
+    "affiliate-marketing",
+    "nextseo",
+    "nodejs",
+    "typescript",
+    "passive-income",
+    "marketing"
+  ],
+  "keywords": [
+    "reddit-bot",
+    "automation",
+    "marketing",
+    "affiliate",
+    "passive-income",
+    "seo",
+    "content-marketing"
+  ],
+  "entry": "src/index.ts",
+  "requirements": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "setup": {
+    "install": "npm install",
+    "configure": "cp .env.example .env",
+    "test": "npm run test",
+    "start": "npm run scan"
+  },
+  "features": [
+    "Subreddit scanner for target communities",
+    "Stealth post generator for NEXTSEO promotion",
+    "Comment engagement automation",
+    "Mock mode for testing without credentials",
+    "Real Reddit API integration",
+    "Rate limiting and error handling"
+  ],
+  "earning_potential": "$30/month per customer (recurring)",
+  "difficulty": "easy",
+  "estimated_setup_time": "5 minutes",
+  "business_model": "affiliate-marketing",
+  "target_audience": "entrepreneurs, marketers, business owners",
+  "monetization": "NEXTSEO affiliate commissions"
+}

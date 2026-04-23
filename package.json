@@ -7,7 +7,8 @@
     "scan": "tsx src/index.ts scan",
     "post": "tsx src/index.ts post",
     "comment": "tsx src/index.ts comment",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts",
+    "test": "node test.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
